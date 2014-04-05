@@ -10,13 +10,17 @@ class GoOracleView extends View
   @content: ->
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
       @div "", class: "loading"
+      @ul class: "oracle-data"
       @div "", class: "message"
 
   initialize: (serializeState) ->
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (data) =>
       @find(".loading").hide()
-      @find(".message").text(data)
+      for line in String(data).split("\n")
+        continue if line == ""
+        parts = line.split(": ")
+        @find('ul').append("<li>#{parts[1]}</li>")
 
     atom.workspaceView.command "go-oracle:describe", => @describe()
     atom.workspaceView.command "go-oracle:callers", => @callers()
@@ -32,6 +36,7 @@ class GoOracleView extends View
     @detach()
 
   showLoadingScreen: ->
+    @find('ul').empty()
     @find(".loading").show().text("Oracle loading ...")
     atom.workspaceView.prependToBottom(this)
 
