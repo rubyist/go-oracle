@@ -1,0 +1,14 @@
+{
+  "name": "go-oracle",
+  "main": "./lib/go-oracle",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "activationEvents": ["go-oracle:toggle"],
+  "repository": "https://github.com/atom/go-oracle",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+  }
+}

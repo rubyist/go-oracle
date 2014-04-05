@@ -1,0 +1,16 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  '.overlayer':
+      'Enable go-oracle': 'go-oracle:toggle'
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'go-oracle'
+      'submenu': [
+        { 'label': 'Toggle', 'command': 'go-oracle:toggle' }
+      ]
+    ]
+  }
+]
