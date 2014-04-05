@@ -56,10 +56,10 @@ class OracleCommand
     buffer = editorView?.getEditor()?.getBuffer()
     cursor = editorView?.getEditor()?.getCursor()
 
-    startPosition = cursor.getBeginningOfCurrentWordBufferPosition()
-    endPosition = cursor.getEndOfCurrentWordBufferPosition()
+    startPosition = cursor.getBeginningOfCurrentWordBufferPosition({"includeNonWordCharacters":false})
+    endPosition = cursor.getEndOfCurrentWordBufferPosition({"includeNonWordCharacters":false})
 
     startOffset = buffer.characterIndexForPosition(startPosition)
     endOffset = buffer.characterIndexForPosition(endPosition)
 
-    return [startOffset+1, endOffset] # TODO: don't +1, get period out of word regex
+    return [startOffset, endOffset]
