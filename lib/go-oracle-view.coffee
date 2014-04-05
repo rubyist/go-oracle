@@ -1,4 +1,4 @@
-{View} = require 'atom'
+{$, $$, View} = require 'atom'
 {Subscriber, Emitter} = require 'emissary'
 OracleCommand = require "./oracle-command"
 
@@ -10,23 +10,44 @@ class GoOracleView extends View
   @content: ->
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
       @h4 "", class: "title"
-      @ul class: "oracle-data"
-      @div "", class: "message"
+      @div outlet: 'data', class: 'panel-body padded'
 
   initialize: (serializeState) ->
+    @data.on 'click', '.source', (event) =>
+      # TODO probably broke as hell
+
+      # Files usually end in: foo.go:70:31            - line 70, col 31
+      # Sometemes end in a range: foo.go:84.21-84.31  - line 84, cols 21 - 31
+      normal = /(.+):(\d+):(\d+)$/
+      range  = /(.+):(\d+)\.(\d+)-(?:\d+)(?:\.\d+)$/
+
+      fileURL = $(event.target).data('uri')
+      matches = normal.exec(fileURL) || range.exec(fileURL)
+      file = matches[1]
+      line = parseInt(matches[2]) - 1
+      col = parseInt(matches[3]) - 1
+
+      newEditor = atom.workspaceView.openSync(file)
+      newEditor.setCursorBufferPosition([line, col])
+
+
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (command, data) =>
       @find(".title").text(" oracle - #{command}")
 
-      for line in String(data).split("\n")
-        continue if line == ""
-        parts = line.split(": ")
-        @find('ul').append("<li>#{parts[1]}</li>")
+      @data.html $$ ->
+        @ul class: 'oracle-data', =>
+          # TODO get the json and use that instead of messing with text output
+          for line in String(data).split("\n")
+            continue if line == ""
+            parts = line.split(": ")
+            @li class: 'source', "data-uri": parts[0], parts[1]
 
     atom.workspaceView.command "go-oracle:describe", => @describe()
     atom.workspaceView.command "go-oracle:callers", => @callers()
     atom.workspaceView.command "go-oracle:callees", => @callees()
     atom.workspaceView.command "core:cancel core:close", => @destroy()
+
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
