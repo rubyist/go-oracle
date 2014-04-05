@@ -7,11 +7,23 @@ class OracleCommand
   Emitter.includeInto(this)
 
   constructor: ->
-    this.on 'what-complete', (data) =>
-      console.log "What complete: #{data}"
-      # run the actual command
-      # emit oracle-complete
-      @emit "oracle-complete", "more data"
+    this.on 'what-complete', (importPath) =>
+      path = @getPath()
+      [startOffset, endOffset] = @getPosition()
+
+      console.log "What complete: #{importPath}"
+      console.log "/Users/scott/src/gocode/bin/oracle -pos=#{path}:##{startOffset} -format=plain #{@nextCommand} #{importPath}"
+
+      # TODO config these
+      env = {"GOPATH": "/Users/scott/src/gocode"}
+      cmd = spawn("/Users/scott/src/gocode/bin/oracle", ["-pos=#{path}:##{startOffset}", "-format=plain", @nextCommand, importPath], {"env": env})
+
+      parsedData = ''
+      cmd.stdout.on 'data', (data) =>
+        parsedData = data #JSON.parse(data)
+
+      cmd.on 'close', (code) =>
+        @emit "oracle-complete", parsedData
 
   what: ->
     # Spawn the what, emit what-complete with data
@@ -32,8 +44,8 @@ class OracleCommand
       @emit 'what-complete', parsedData.what.importpath
 
   command: (cmd) ->
-    # set command, spawn what
     console.log "Launching command #{cmd}"
+    @nextCommand = cmd
     @what()
 
   getPath: ->

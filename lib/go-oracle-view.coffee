@@ -14,7 +14,8 @@ class GoOracleView extends View
   initialize: (serializeState) ->
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (data) =>
-      console.log "Oracle complete: #{data}"
+      @find(".message").text(data)
+      atom.workspaceView.append(this)
 
     atom.workspaceView.command "go-oracle:describe", => @describe()
     atom.workspaceView.command "go-oracle:callers", => @callers()
@@ -38,12 +39,13 @@ class GoOracleView extends View
     #   atom.workspaceView.append(this)
 
   callers: ->
-    console.log "Go Oracle: Callers"
-    this.find('.message').text("Callers")
-    if @hasParent()
-      @detach()
-    else
-      atom.workspaceView.append(this)
+    @oracle.command("callers")
+    # console.log "Go Oracle: Callers"
+    # this.find('.message').text("Callers")
+    # if @hasParent()
+    #   @detach()
+    # else
+    #   atom.workspaceView.append(this)
 
   callees: ->
     console.log "Go Oracle: Callees"
