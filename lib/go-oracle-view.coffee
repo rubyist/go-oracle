@@ -9,14 +9,15 @@ class GoOracleView extends View
 
   @content: ->
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
-      @div "", class: "loading"
+      @h4 "", class: "title"
       @ul class: "oracle-data"
       @div "", class: "message"
 
   initialize: (serializeState) ->
     @oracle = new OracleCommand()
-    @oracle.on 'oracle-complete', (data) =>
-      @find(".loading").hide()
+    @oracle.on 'oracle-complete', (command, data) =>
+      @find(".title").text(" oracle - #{command}")
+
       for line in String(data).split("\n")
         continue if line == ""
         parts = line.split(": ")
@@ -37,7 +38,7 @@ class GoOracleView extends View
 
   showLoadingScreen: ->
     @find('ul').empty()
-    @find(".loading").show().text("Oracle loading ...")
+    @find('.title').text(" oracle - loading")
     atom.workspaceView.prependToBottom(this)
 
   describe: ->

@@ -30,7 +30,7 @@ class OracleCommand
         parsedData = data
 
       cmd.on 'close', (code) =>
-        @emit "oracle-complete", parsedData
+        @emit "oracle-complete", @nextCommand, parsedData
 
   what: ->
     what = @oracleCommand("what", "json")
