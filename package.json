@@ -3,6 +3,13 @@
   "main": "./lib/go-oracle",
   "version": "0.0.0",
   "description": "Interface for using Go's oracle tool",
+  "keywords": [
+    "go",
+    "golang",
+    "oracle"
+  ],
+  "author": "Scott Barron <scott@rubyi.st>",
+  "homepage": "https://atom.io/packages/go-oracle",
   "activationEvents": ["go-oracle:describe", "go-oracle:callers", "go-oracle:callees"],
   "repository": "https://github.com/rubyist/go-oracle",
   "license": "MIT",
