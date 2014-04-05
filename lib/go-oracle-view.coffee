@@ -8,14 +8,15 @@ class GoOracleView extends View
   Emitter.includeInto(this)
 
   @content: ->
-    @div class: 'go-oracle overlay from-top', =>
+    @div class: 'go-oracle tool-panel panel-bottom padding', =>
       @div "", class: "message"
 
   initialize: (serializeState) ->
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (data) =>
       @find(".message").text(data)
-      atom.workspaceView.append(this)
+
+      atom.workspaceView.prependToBottom(this)
 
     atom.workspaceView.command "go-oracle:describe", => @describe()
     atom.workspaceView.command "go-oracle:callers", => @callers()
