@@ -6,40 +6,34 @@ class OracleCommand
   Subscriber.includeInto(this)
   Emitter.includeInto(this)
 
+  oracleCommand: (cmd, format, importPath) ->
+    path = @getPath()
+    [startOffset, endOffset] = @getPosition()
+
+    gopath = @goPath()
+    env = {"GOPATH": gopath}
+    oracleCmd = atom.config.get('go-oracle.oraclePath')
+    oracleCmd = oracleCmd.replace(/^\$GOPATH\//i, gopath)
+
+    args = ["-pos=#{path}:##{startOffset}", "-format=#{format}", cmd]
+    args.push(importPath) if importPath?
+
+    console.log "#{oracleCmd} -pos=#{path}:##{startOffset} -format=plain #{cmd} #{importPath}"
+
+    return spawn(oracleCmd, args, {"env": env})
+
   constructor: ->
     this.on 'what-complete', (importPath) =>
-      path = @getPath()
-      [startOffset, endOffset] = @getPosition()
-
-      env = {"GOPATH": @goPath()}
-      oracleCmd = atom.config.get('go-oracle.oraclePath')
-      oracleCmd = oracleCmd.replace(/^\$GOPATH\//i, @goPath())
-
-      console.log "What complete: #{importPath}"
-      console.log "#{oracleCmd} -pos=#{path}:##{startOffset} -format=plain #{@nextCommand} #{importPath}"
-
-      cmd = spawn(oracleCmd, ["-pos=#{path}:##{startOffset}", "-format=plain", @nextCommand, importPath], {"env": env})
-
+      cmd = @oracleCommand(@nextCommand, "plain", importPath)
       parsedData = ''
       cmd.stdout.on 'data', (data) =>
-        parsedData = data #JSON.parse(data)
+        parsedData = data
 
       cmd.on 'close', (code) =>
         @emit "oracle-complete", parsedData
 
   what: ->
-    # Spawn the what, emit what-complete with data
-    path = @getPath()
-    [startOffset, endOffset] = @getPosition()
-
-    env = {"GOPATH": @goPath()}
-    oracleCmd = atom.config.get('go-oracle.oraclePath')
-    oracleCmd = oracleCmd.replace(/^\$GOPATH\//i, @goPath())
-
-    console.log "#{oracleCmd} -pos=#{path}:##{startOffset} -format=json what"
-
-    what = spawn(oracleCmd, ["-pos=#{path}:##{startOffset}", "-format=json", "what"], {"env": env})
-
+    what = @oracleCommand("what", "json")
     parsedData = ''
     what.stdout.on 'data', (data) =>
       parsedData = JSON.parse(data)
@@ -48,7 +42,6 @@ class OracleCommand
       @emit 'what-complete', parsedData.what.importpath
 
   command: (cmd) ->
-    console.log "Launching command #{cmd}"
     @nextCommand = cmd
     @what()
 
