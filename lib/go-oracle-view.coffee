@@ -8,7 +8,7 @@ class GoOracleView extends View
   Emitter.includeInto(this)
 
   @content: ->
-    @div class: 'go-oracle tool-panel panel-bottom padding', =>
+    @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
       @div "", class: "message"
 
   initialize: (serializeState) ->
@@ -21,6 +21,7 @@ class GoOracleView extends View
     atom.workspaceView.command "go-oracle:describe", => @describe()
     atom.workspaceView.command "go-oracle:callers", => @callers()
     atom.workspaceView.command "go-oracle:callees", => @callees()
+    atom.workspaceView.command "core:cancel core:close", => @destroy()
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
