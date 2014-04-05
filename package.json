@@ -3,7 +3,7 @@
   "main": "./lib/go-oracle",
   "version": "0.0.0",
   "description": "A short description of your package",
-  "activationEvents": ["go-oracle:toggle"],
+  "activationEvents": ["go-oracle:describe", "go-oracle:callers", "go-oracle:callees"],
   "repository": "https://github.com/atom/go-oracle",
   "license": "MIT",
   "engines": {
