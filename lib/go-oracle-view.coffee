@@ -9,7 +9,7 @@ class GoOracleView extends View
 
   @content: ->
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
-      @div class: 'header', =>
+      @h4 class: 'header', =>
         @span " oracle ", class: "title"
         @select outlet: 'modes'
       @div outlet: 'data', class: 'panel-body padded'
