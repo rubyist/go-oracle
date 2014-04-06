@@ -34,7 +34,11 @@ class GoOracleView extends View
 
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (command, data) =>
+      @modes.empty()
+      for mode in @availableModes
+        @modes.append("<option value=\"#{mode}\">#{mode}</option>")
       @modes.val(command)
+      
       @find(".title").text(" oracle - #{command}")
 
       @data.html $$ ->
@@ -46,9 +50,7 @@ class GoOracleView extends View
             @li class: 'source', "data-uri": parts[0], parts[1]
 
     @oracle.on 'what-complete', (data) =>
-      @modes.empty()
-      for mode in data.what.modes
-        @modes.append("<option value=\"#{mode}\">#{mode}</option>")
+      @availableModes = data.what.modes
 
     @modes.on 'change', =>
       # TODO maybe validate the modes since it shells out?
