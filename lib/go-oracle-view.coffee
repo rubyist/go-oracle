@@ -11,6 +11,7 @@ class GoOracleView extends View
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
       @h4 "", class: "title"
       @div outlet: 'data', class: 'panel-body padded'
+      @select outlet: 'modes'
 
   initialize: (serializeState) ->
     @data.on 'click', '.source', (event) =>
@@ -33,6 +34,7 @@ class GoOracleView extends View
 
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (command, data) =>
+      @modes.val(command)
       @find(".title").text(" oracle - #{command}")
 
       @data.html $$ ->
@@ -42,6 +44,10 @@ class GoOracleView extends View
             continue if line == ""
             parts = line.split(": ")
             @li class: 'source', "data-uri": parts[0], parts[1]
+
+    @oracle.on 'what-complete', (data) =>
+      for mode in data.what.modes
+        @modes.append("<option value=\"#{mode}\">#{mode}</option>")
 
     atom.workspaceView.command "go-oracle:oracle", => @openOracle()
     atom.workspaceView.command "core:cancel core:close", => @destroy()
