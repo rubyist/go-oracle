@@ -2,3 +2,15 @@
 'context-menu':
   '.overlayer':
       'Go Oracle': 'go-oracle:oracle'
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Go Oracle'
+      'submenu': [
+        { 'label': 'Oracle', 'command': 'go-oracle:oracle' }
+      ]
+    ]
+  }
+]
