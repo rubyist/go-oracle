@@ -46,8 +46,13 @@ class GoOracleView extends View
             @li class: 'source', "data-uri": parts[0], parts[1]
 
     @oracle.on 'what-complete', (data) =>
+      @modes.empty()
       for mode in data.what.modes
         @modes.append("<option value=\"#{mode}\">#{mode}</option>")
+
+    @modes.on 'change', =>
+      # TODO maybe validate the modes since it shells out?
+      @runOracle(@modes.val())
 
     atom.workspaceView.command "go-oracle:oracle", => @openOracle()
     atom.workspaceView.command "core:cancel core:close", => @destroy()
@@ -65,15 +70,7 @@ class GoOracleView extends View
     @find('ul').empty()
     @find('.title').text(" oracle - loading")
     atom.workspaceView.prependToBottom(this)
-    @describe()
+    @runOracle('describe')
 
-  describe: ->
-    @oracle.command("describe")
-
-  callers: ->
-    @showLoadingScreen()
-    @oracle.command("callers")
-
-  callees: ->
-    @showLoadingScreen()
-    @oracle.command("callees")
+  runOracle: (command) ->
+    @oracle.command(command)
