@@ -67,10 +67,10 @@ class GoOracleView extends View
     @detach()
 
   openOracle: ->
-    @find('ul').empty()
-    @find('.title').text(" oracle - loading")
     atom.workspaceView.prependToBottom(this)
     @runOracle('describe')
 
   runOracle: (command) ->
+    @find('ul').empty()
+    @find('.title').text(" oracle - loading")
     @oracle.command(command)
