@@ -9,9 +9,10 @@ class GoOracleView extends View
 
   @content: ->
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
-      @h4 "", class: "title"
+      @div class: 'header', =>
+        @span " oracle ", class: "title"
+        @select outlet: 'modes'
       @div outlet: 'data', class: 'panel-body padded'
-      @select outlet: 'modes'
 
   initialize: (serializeState) ->
     @data.on 'click', '.source', (event) =>
@@ -38,8 +39,6 @@ class GoOracleView extends View
       for mode in @availableModes
         @modes.append("<option value=\"#{mode}\">#{mode}</option>")
       @modes.val(command)
-      
-      @find(".title").text(" oracle - #{command}")
 
       @data.html $$ ->
         @ul class: 'oracle-data', =>
@@ -74,5 +73,4 @@ class GoOracleView extends View
 
   runOracle: (command) ->
     @find('ul').empty()
-    @find('.title').text(" oracle - loading")
     @oracle.command(command)
