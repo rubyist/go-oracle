@@ -43,9 +43,7 @@ class GoOracleView extends View
             parts = line.split(": ")
             @li class: 'source', "data-uri": parts[0], parts[1]
 
-    atom.workspaceView.command "go-oracle:describe", => @describe()
-    atom.workspaceView.command "go-oracle:callers", => @callers()
-    atom.workspaceView.command "go-oracle:callees", => @callees()
+    atom.workspaceView.command "go-oracle:oracle", => @openOracle()
     atom.workspaceView.command "core:cancel core:close", => @destroy()
 
 
@@ -57,7 +55,7 @@ class GoOracleView extends View
     @unsubscribe
     @detach()
 
-  showLoadingScreen: ->
+  openOracle: ->
     @find('ul').empty()
     @find('.title').text(" oracle - loading")
     atom.workspaceView.prependToBottom(this)

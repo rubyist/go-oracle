@@ -1,6 +1,4 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
   '.overlayer':
-      'Go Oracle: Describe': 'go-oracle:describe'
-      'Go Oracle: Callers': 'go-oracle:callers'
-      'Go Oracle: Callees': 'go-oracle:callees'
+      'Go Oracle': 'go-oracle:oracle'
