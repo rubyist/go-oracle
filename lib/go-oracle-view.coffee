@@ -59,9 +59,9 @@ class GoOracleView extends View
     @find('ul').empty()
     @find('.title').text(" oracle - loading")
     atom.workspaceView.prependToBottom(this)
+    @describe()
 
   describe: ->
-    @showLoadingScreen()
     @oracle.command("describe")
 
   callers: ->
