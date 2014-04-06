@@ -12,6 +12,7 @@ class GoOracleView extends View
       @h4 class: 'header', =>
         @span " oracle ", class: "title"
         @select outlet: 'modes'
+      @div " Loading", class: "loading"
       @div outlet: 'data', class: 'panel-body padded'
 
   initialize: (serializeState) ->
@@ -35,6 +36,8 @@ class GoOracleView extends View
 
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (command, data) =>
+      @find('.loading').hide()
+
       @modes.empty()
       for mode in @availableModes
         @modes.append("<option value=\"#{mode}\">#{mode}</option>")
@@ -73,4 +76,5 @@ class GoOracleView extends View
 
   runOracle: (command) ->
     @find('ul').empty()
+    @find('.loading').show()
     @oracle.command(command)

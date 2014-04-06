@@ -1,4 +1,4 @@
-# go-oracle package
+# go-oracle Use Go's Oracle from Atom
 
 The `go-oracle` package provides an interface for Go's `oracle` tool.
 
