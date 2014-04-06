@@ -23,8 +23,8 @@ class OracleCommand
     return spawn(oracleCmd, args, {"env": env})
 
   constructor: ->
-    this.on 'what-complete', (importPath) =>
-      cmd = @oracleCommand(@nextCommand, "plain", importPath)
+    this.on 'what-complete', (whatData) =>
+      cmd = @oracleCommand(@nextCommand, "plain", whatData.what.importpath)
       parsedData = ''
       cmd.stdout.on 'data', (data) =>
         parsedData = data
@@ -39,7 +39,7 @@ class OracleCommand
       parsedData = JSON.parse(data)
 
     what.on 'close', (code) =>
-      @emit 'what-complete', parsedData.what.importpath
+      @emit 'what-complete', parsedData
 
   command: (cmd) ->
     @nextCommand = cmd
