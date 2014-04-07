@@ -1,7 +1,7 @@
 {
   "name": "go-oracle",
   "main": "./lib/go-oracle",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Interface for using Go's oracle tool",
   "keywords": [
     "go",
