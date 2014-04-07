@@ -9,7 +9,10 @@ class GoOracleView extends View
 
   @content: ->
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
-      @h4 "", class: "title"
+      @h4 class: 'header', =>
+        @span " oracle ", class: "title"
+        @select outlet: 'modes'
+      @div " Loading", class: "loading"
       @div outlet: 'data', class: 'panel-body padded'
 
   initialize: (serializeState) ->
@@ -33,7 +36,12 @@ class GoOracleView extends View
 
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (command, data) =>
-      @find(".title").text(" oracle - #{command}")
+      @find('.loading').hide()
+
+      @modes.empty()
+      for mode in @availableModes
+        @modes.append("<option value=\"#{mode}\">#{mode}</option>")
+      @modes.val(command)
 
       @data.html $$ ->
         @ul class: 'oracle-data', =>
@@ -43,9 +51,14 @@ class GoOracleView extends View
             parts = line.split(": ")
             @li class: 'source', "data-uri": parts[0], parts[1]
 
-    atom.workspaceView.command "go-oracle:describe", => @describe()
-    atom.workspaceView.command "go-oracle:callers", => @callers()
-    atom.workspaceView.command "go-oracle:callees", => @callees()
+    @oracle.on 'what-complete', (data) =>
+      @availableModes = data.what.modes
+
+    @modes.on 'change', =>
+      # TODO maybe validate the modes since it shells out?
+      @runOracle(@modes.val())
+
+    atom.workspaceView.command "go-oracle:oracle", => @openOracle()
     atom.workspaceView.command "core:cancel core:close", => @destroy()
 
 
@@ -57,19 +70,11 @@ class GoOracleView extends View
     @unsubscribe
     @detach()
 
-  showLoadingScreen: ->
-    @find('ul').empty()
-    @find('.title').text(" oracle - loading")
+  openOracle: ->
     atom.workspaceView.prependToBottom(this)
+    @runOracle('describe')
 
-  describe: ->
-    @showLoadingScreen()
-    @oracle.command("describe")
-
-  callers: ->
-    @showLoadingScreen()
-    @oracle.command("callers")
-
-  callees: ->
-    @showLoadingScreen()
-    @oracle.command("callees")
+  runOracle: (command) ->
+    @find('ul').empty()
+    @find('.loading').show()
+    @oracle.command(command)

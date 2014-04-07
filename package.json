@@ -11,9 +11,7 @@
   "author": "Scott Barron <scott@rubyi.st>",
   "homepage": "https://atom.io/packages/go-oracle",
   "activationEvents": [
-    "go-oracle:describe",
-    "go-oracle:callers",
-    "go-oracle:callees"
+    "go-oracle:oracle"
   ],
   "repository": "https://github.com/rubyist/go-oracle",
   "license": "MIT",
