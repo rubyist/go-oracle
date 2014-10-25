@@ -10,36 +10,49 @@ class OracleCommand
     path = @getPath()
     [startOffset, endOffset] = @getPosition()
 
-    gopath = @goPath()
-    env = {"GOPATH": gopath}
-    oracleCmd = atom.config.get('go-oracle.oraclePath')
-    oracleCmd = oracleCmd.replace(/^\$GOPATH\//i, gopath)
-
     args = ["-pos=#{path}:##{startOffset}", "-format=#{format}", cmd]
     args.push(importPath) if importPath?
 
-    console.log "#{oracleCmd} -pos=#{path}:##{startOffset} -format=plain #{cmd} #{importPath}"
-
-    return spawn(oracleCmd, args, {"env": env})
+    return spawn("oracle", args)
 
   constructor: ->
     this.on 'what-complete', (whatData) =>
       cmd = @oracleCommand(@nextCommand, "plain", whatData.what.importpath)
-      parsedData = ''
+
+      stderr = ''
+      cmd.stderr.on 'data', (data) =>
+        stderr += data
+
+      stdout = ''
       cmd.stdout.on 'data', (data) =>
-        parsedData = data
+        stdout += data
 
       cmd.on 'close', (code) =>
-        @emit "oracle-complete", @nextCommand, parsedData
+        if code
+          console.log "failed to run oracle: exit status", code
+          console.log stdout
+          console.log stderr
+
+        @emit "oracle-complete", @nextCommand, stdout
 
   what: ->
     what = @oracleCommand("what", "json")
-    parsedData = ''
+
+    stderr = ''
+    what.stderr.on 'data', (data) =>
+      stderr += data
+
+    stdout = ''
     what.stdout.on 'data', (data) =>
-      parsedData = JSON.parse(data)
+      stdout = JSON.parse(data)
 
     what.on 'close', (code) =>
-      @emit 'what-complete', parsedData
+      if code
+        console.log "failed to run oracle what: exit status", code
+        console.log stdout
+        console.log stderr
+
+      @emit 'what-complete', stdout
 
   command: (cmd) ->
     @nextCommand = cmd
@@ -60,11 +73,3 @@ class OracleCommand
     endOffset = buffer.characterIndexForPosition(endPosition)
 
     return [startOffset, endOffset]
-
-  goPath: ->
-    gopath = ''
-    gopathEnv = process.env.GOPATH
-    gopathConfig = atom.config.get('go-oracle.goPath')
-    gopath = gopathEnv if gopathEnv? and gopathEnv isnt ''
-    gopath = gopathConfig if gopath is ''
-    return gopath + '/'
