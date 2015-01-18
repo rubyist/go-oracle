@@ -28,7 +28,8 @@ class OracleCommand
       parsedData = ''
       cmd.stdout.on 'data', (data) =>
         parsedData = data
-
+      cmd.stderr.on 'data', (data) =>
+        console.error "Error running \""+@nextCommand + "\": " + data
       cmd.on 'close', (code) =>
         @emit "oracle-complete", @nextCommand, parsedData
 
@@ -37,7 +38,8 @@ class OracleCommand
     parsedData = ''
     what.stdout.on 'data', (data) =>
       parsedData = JSON.parse(data)
-
+    what.stderr.on 'data', (data) =>
+      console.error "Error running \"what\": " + data
     what.on 'close', (code) =>
       @emit 'what-complete', parsedData
 
