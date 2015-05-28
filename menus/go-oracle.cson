@@ -1,6 +1,6 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
-  '.overlayer':
+  'atom-text-editor, .overlayer':
       'Go Oracle': 'go-oracle:oracle'
 
 'menu': [
