@@ -10,7 +10,7 @@
   ],
   "author": "Scott Barron <scott@rubyi.st>",
   "homepage": "https://atom.io/packages/go-oracle",
-  "activationEvents": [
+  "activationCommands": [
     "go-oracle:oracle"
   ],
   "repository": "https://github.com/rubyist/go-oracle",
