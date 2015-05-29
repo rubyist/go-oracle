@@ -12,7 +12,6 @@ module.exports =
   goOracleView: null
 
   activate: (state) ->
-    console.log 'wtf'
     @goOracleView = new GoOracleView(state.goOracleViewState)
 
   deactivate: ->
