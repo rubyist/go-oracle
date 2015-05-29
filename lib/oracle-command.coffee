@@ -48,12 +48,12 @@ class OracleCommand
     @what()
 
   getPath: ->
-    return atom.workspaceView.getActiveView()?.getEditor()?.getPath()
+    atom.workspace.getActiveTextEditor()?.getPath()
 
   getPosition: ->
-    editorView = atom.workspaceView.getActiveView()
-    buffer = editorView?.getEditor()?.getBuffer()
-    cursor = editorView?.getEditor()?.getLastCursor()
+    editor = atom.workspace.getActiveTextEditor()
+    buffer = editor?.getBuffer()
+    cursor = editor?.getLastCursor()
 
     startPosition = cursor.getBeginningOfCurrentWordBufferPosition({"includeNonWordCharacters":false})
     endPosition = cursor.getEndOfCurrentWordBufferPosition({"includeNonWordCharacters":false})
