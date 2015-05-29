@@ -30,9 +30,8 @@ class GoOracleView extends View
       line = parseInt(matches[2]) - 1
       col = parseInt(matches[3]) - 1
 
-      newEditor = atom.workspaceView.openSync(file)
-      newEditor.setCursorBufferPosition([line, col])
-
+      newEditor = atom.workspace.open(file).then (newEditor) ->
+        newEditor.setCursorBufferPosition([line, col])
 
     @oracle = new OracleCommand()
     @oracle.on 'oracle-complete', (command, data) =>
