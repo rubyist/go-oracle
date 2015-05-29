@@ -1,9 +1,8 @@
 spawn = require('child_process').spawn
-{Subscriber, Emitter} = require 'emissary'
+{Emitter} = require 'emissary'
 
 module.exports =
 class OracleCommand
-  Subscriber.includeInto(this)
   Emitter.includeInto(this)
 
   oracleCommand: (cmd, format, importPath) ->
