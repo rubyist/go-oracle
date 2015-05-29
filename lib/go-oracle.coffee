@@ -1,9 +1,13 @@
 GoOracleView = require './go-oracle-view'
 
 module.exports =
-  configDefaults:
-    goPath: ""
-    oraclePath: "$GOPATH/bin/oracle"
+  config:
+    goPath:
+      type: 'string'
+      default: ''
+    oraclePath:
+      type: 'string'
+      default: '$GOPATH/bin/oracle'
 
   goOracleView: null
 
