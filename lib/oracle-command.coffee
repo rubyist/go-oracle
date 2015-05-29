@@ -53,7 +53,7 @@ class OracleCommand
   getPosition: ->
     editorView = atom.workspaceView.getActiveView()
     buffer = editorView?.getEditor()?.getBuffer()
-    cursor = editorView?.getEditor()?.getCursor()
+    cursor = editorView?.getEditor()?.getLastCursor()
 
     startPosition = cursor.getBeginningOfCurrentWordBufferPosition({"includeNonWordCharacters":false})
     endPosition = cursor.getEndOfCurrentWordBufferPosition({"includeNonWordCharacters":false})
