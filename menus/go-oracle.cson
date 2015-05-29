@@ -1,8 +1,8 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
-  '.overlayer':
-      'Go Oracle': 'go-oracle:oracle'
-
+  'atom-text-editor, .overlayer': [
+    {'label': 'Go Oracle', 'command': 'go-oracle:oracle'}
+  ]
 'menu': [
   {
     'label': 'Packages'
