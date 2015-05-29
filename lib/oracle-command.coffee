@@ -1,9 +1,8 @@
 spawn = require('child_process').spawn
-{Subscriber, Emitter} = require 'emissary'
+{Emitter} = require 'emissary'
 
 module.exports =
 class OracleCommand
-  Subscriber.includeInto(this)
   Emitter.includeInto(this)
 
   oracleCommand: (cmd, format, importPath) ->
@@ -48,12 +47,12 @@ class OracleCommand
     @what()
 
   getPath: ->
-    return atom.workspaceView.getActiveView()?.getEditor()?.getPath()
+    atom.workspace.getActiveTextEditor()?.getPath()
 
   getPosition: ->
-    editorView = atom.workspaceView.getActiveView()
-    buffer = editorView?.getEditor()?.getBuffer()
-    cursor = editorView?.getEditor()?.getCursor()
+    editor = atom.workspace.getActiveTextEditor()
+    buffer = editor?.getBuffer()
+    cursor = editor?.getLastCursor()
 
     startPosition = cursor.getBeginningOfCurrentWordBufferPosition({"includeNonWordCharacters":false})
     endPosition = cursor.getEndOfCurrentWordBufferPosition({"includeNonWordCharacters":false})

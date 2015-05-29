@@ -10,15 +10,18 @@
   ],
   "author": "Scott Barron <scott@rubyi.st>",
   "homepage": "https://atom.io/packages/go-oracle",
-  "activationCommands": [
-    "go-oracle:oracle"
-  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "go-oracle:oracle"
+    ]
+  },
   "repository": "https://github.com/rubyist/go-oracle",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
   },
   "dependencies": {
+    "atom-space-pen-views": "^2.0.5",
     "emissary": "1.x"
   }
 }
