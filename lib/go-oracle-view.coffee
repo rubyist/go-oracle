@@ -1,4 +1,4 @@
-{$, $$, View} = require 'atom'
+{$, $$, View} = require 'atom-space-pen-views'
 {Subscriber, Emitter} = require 'emissary'
 OracleCommand = require "./oracle-command"
 
