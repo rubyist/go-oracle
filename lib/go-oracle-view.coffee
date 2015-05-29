@@ -57,20 +57,17 @@ class GoOracleView extends View
       # TODO maybe validate the modes since it shells out?
       @runOracle(@modes.val())
 
-    atom.workspaceView.command "go-oracle:oracle", => @openOracle()
-    atom.workspaceView.command "core:cancel core:close", => @destroy()
-
+    atom.commands.add 'atom-workspace',
+      'go-oracle:oracle': => @openOracle()
+      'core:cancel': => @panel?.hide()
+      'core:close': => @panel?.hide()
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
-  # Tear down any state and detach
-  destroy: ->
-    @unsubscribe
-    @detach()
-
   openOracle: ->
-    atom.workspaceView.prependToBottom(this)
+    @panel ?= atom.workspace.addBottomPanel(item: this, visible: false, className: 'tool-panel panel-bottom')
+    @panel.show()
     @runOracle('describe')
 
   runOracle: (command) ->
