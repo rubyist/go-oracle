@@ -1,12 +1,8 @@
 {$, $$, View} = require 'atom-space-pen-views'
-{Subscriber, Emitter} = require 'emissary'
 OracleCommand = require "./oracle-command"
 
 module.exports =
 class GoOracleView extends View
-  Subscriber.includeInto(this)
-  Emitter.includeInto(this)
-
   @content: ->
     @div class: 'go-oracle tool-panel pannel panel-bottom padding', =>
       @h4 class: 'header', =>
