@@ -5,6 +5,9 @@ module.exports =
     goPath:
       type: 'string'
       default: ''
+    goRoot:
+      type: 'string'
+      default: ''
     oraclePath:
       type: 'string'
       default: '$GOPATH/bin/oracle'
