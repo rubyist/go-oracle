@@ -10,7 +10,8 @@ class OracleCommand
     [startOffset, endOffset] = @getPosition()
 
     gopath = @goPath()
-    env = {"GOPATH": gopath}
+    goroot = @goRoot()
+    env = {"GOPATH": gopath, "PATH": gopath+ "bin:" + goroot + "bin:" + process.env.PATH}
     oracleCmd = atom.config.get('go-oracle.oraclePath')
     oracleCmd = oracleCmd.replace(/^\$GOPATH\//i, gopath)
 
@@ -69,3 +70,11 @@ class OracleCommand
     gopath = gopathEnv if gopathEnv? and gopathEnv isnt ''
     gopath = gopathConfig if gopath is ''
     return gopath + '/'
+
+  goRoot: ->
+    goroot = ''
+    gorootEnv = process.env.GOROOT
+    gorootConfig = atom.config.get('go-oracle.goRoot')
+    goroot = gorootEnv if gorootEnv? and gorootEnv isnt ''
+    goroot = gorootConfig if goroot is ''
+    return goroot + '/'
