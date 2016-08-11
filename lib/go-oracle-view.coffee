@@ -47,7 +47,7 @@ class GoOracleView extends View
             @li class: 'source', "data-uri": parts[0], parts[1]
 
     @oracle.on 'what-complete', (data) =>
-      @availableModes = data.what.modes
+      @availableModes = data.modes
 
     @modes.on 'change', =>
       # TODO maybe validate the modes since it shells out?

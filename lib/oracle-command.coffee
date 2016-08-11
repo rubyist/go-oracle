@@ -5,7 +5,7 @@ module.exports =
 class OracleCommand
   Emitter.includeInto(this)
 
-  oracleCommand: (cmd, format, importPath) ->
+  oracleCommand: (cmd, format) ->
     path = @getPath()
     [startOffset, endOffset] = @getPosition()
 
@@ -14,16 +14,17 @@ class OracleCommand
     oracleCmd = atom.config.get('go-oracle.oraclePath')
     oracleCmd = oracleCmd.replace(/^\$GOPATH\//i, gopath)
 
-    args = ["-pos=#{path}:##{startOffset}", "-format=#{format}", cmd]
-    args.push(importPath) if importPath?
+    args = []
+    args.push(format) if format
+    args.push(cmd, "#{path}:##{startOffset}")
 
-    console.log "#{oracleCmd} -pos=#{path}:##{startOffset} -format=plain #{cmd} #{importPath}"
+    console.log "#{oracleCmd} #{args}"
 
     return spawn(oracleCmd, args, {"env": env})
 
   constructor: ->
     this.on 'what-complete', (whatData) =>
-      cmd = @oracleCommand(@nextCommand, "plain", whatData.what.importpath)
+      cmd = @oracleCommand(@nextCommand)
       parsedData = ''
       cmd.stdout.on 'data', (data) =>
         parsedData = data
@@ -33,7 +34,7 @@ class OracleCommand
         @emit "oracle-complete", @nextCommand, parsedData
 
   what: ->
-    what = @oracleCommand("what", "json")
+    what = @oracleCommand("what", "-json")
     parsedData = ''
     what.stdout.on 'data', (data) =>
       parsedData = JSON.parse(data)
